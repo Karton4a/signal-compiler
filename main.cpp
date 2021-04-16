@@ -5,6 +5,7 @@
 #include <iomanip>
 
 void PrintTree(const Parser::ParserNode* root, int depth, const Lexer& lex);
+void GenerateSyntaxTreeMarkdown(const Parser::ParserNode* root, const Lexer& lex, std::ostream& stream);
 
 int main(int argc, const char* argv[])
 {
@@ -71,7 +72,8 @@ int main(int argc, const char* argv[])
 		}
 		else
 		{
-			PrintTree(pars.GetTree(),0,lex);
+			//PrintTree(pars.GetTree(),0,lex);
+			GenerateSyntaxTreeMarkdown(pars.GetTree(), lex, std::cout);
 		}
 
 	}
@@ -99,4 +101,22 @@ void PrintTree(const Parser::ParserNode* root,int depth,const Lexer& lex)
 	{
 		PrintTree(&child, depth + 1, lex);
 	}
+}
+void GenerateSyntaxTreeMarkdown(const Parser::ParserNode* root, const Lexer& lex,std::ostream& stream)
+{
+	stream << "[";
+	if (root->Type == NodeType::Token)
+	{
+		lex.PrintValueToStream(stream, root->Token.Type);
+		stream << "-" << root->Token.Type;
+	}
+	else
+	{
+		stream << NodeTypeToString(root->Type);
+	}
+	for (auto child : root->Childs)
+	{
+		GenerateSyntaxTreeMarkdown(&child, lex, stream);
+	}
+	stream << "]";
 }
