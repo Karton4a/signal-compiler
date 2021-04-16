@@ -97,6 +97,6 @@ void PrintTree(const Parser::ParserNode* root,int depth,const Lexer& lex)
 
 	for (auto child : root->Childs)
 	{
-		PrintTree(child, depth + 1, lex);
+		PrintTree(&child, depth + 1, lex);
 	}
 }

@@ -8,10 +8,10 @@ void Parser::Parse(const Lexer& lexer)
 
 	m_CurrentToken = table.cbegin();
 	m_End = table.cend();
-	m_Root = new ParserNode(NodeType::SignalProgram);
+	m_Root = ParserNode(NodeType::SignalProgram);
 	try
 	{
-		Program(m_Root);
+		Program(&m_Root);
 	}
 	catch (ParserException& err)
 	{
@@ -38,7 +38,7 @@ void Parser::Program(ParserNode* _root)
 	{
 		throw ValueException('.', *m_CurrentToken);
 	}
-	root->Childs.push_back(new ParserNode(*m_CurrentToken));
+	root->Childs.emplace_back(*m_CurrentToken);
 }
 
 void Parser::ProcedureIdentifier(ParserNode* _root)
@@ -246,9 +246,8 @@ bool Parser::Alternative(ParserNode* _root)
 
 Parser::ParserNode* Parser::PushType(ParserNode* _node, NodeType type)
 {
-	ParserNode* node = new ParserNode(type);
-	_node->Childs.push_back(node);
-	return node;
+	_node->Childs.emplace_back(type);
+	return &_node->Childs.back();
 }
 
 void Parser::NextToken()
@@ -263,7 +262,7 @@ void Parser::NextToken()
 
 void Parser::PushCurrentToken(ParserNode* _root)
 {
-	_root->Childs.push_back(new ParserNode(*m_CurrentToken));
+	_root->Childs.emplace_back(*m_CurrentToken);
 	NextToken();
 }
 

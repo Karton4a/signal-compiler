@@ -2,6 +2,7 @@
 #include "../Lexer/Lexer.h"
 
 #include <vector>
+#include <list>
 #include <sstream>
 
 enum class NodeType
@@ -32,18 +33,19 @@ public:
 	using ErrorMessage = std::string;
 	struct ParserNode
 	{
+		ParserNode() = default;
 		ParserNode(NodeType type)
-			:Type(type) {}
+			:Type(type),Token() {}
 
 		ParserNode(const Lexer::Token token)
 			:Type(NodeType::Token),Token(token) {}
 
 		NodeType Type;
 		Lexer::Token Token;
-		std::vector<ParserNode*> Childs;
+		std::list<ParserNode> Childs;
 	};
 	void Parse(const Lexer& lexer);
-	ParserNode* GetTree() { return m_Root; }
+	ParserNode* GetTree() { return &m_Root; }
 	bool IsHaveError() { return !m_Error.empty(); }
 	const ErrorMessage& GetError() const { return m_Error; }
 private:
@@ -67,6 +69,6 @@ private:
 	Lexer::TokenTable::const_iterator m_CurrentToken;
 	Lexer::TokenTable::const_iterator m_PreviousToken;
 	Lexer::TokenTable::const_iterator m_End;
-	ParserNode* m_Root = nullptr;
+	ParserNode m_Root;
 	std::string m_Error;
 };
