@@ -51,13 +51,13 @@ private:
 	void ProcedureIdentifier(ParserNode* _root);
 	void Identifier(ParserNode* _root);
 	void Block(ParserNode* _root);
-	void StatementsList(ParserNode* _root);
+	bool StatementsList(ParserNode* _root);
 	bool Statement(ParserNode* _root);
 	bool Expresion(ParserNode* _root);
 	void MultipliersList(ParserNode* _root);
 	bool MultiplicationInstruction(ParserNode* _root);
 	bool Multiplier(ParserNode* _root);
-	void AlternativesList(ParserNode* _root);
+	bool AlternativesList(ParserNode* _root);
 	bool Alternative(ParserNode* _root);
 
 	ParserNode* PushType(ParserNode* node, NodeType type);

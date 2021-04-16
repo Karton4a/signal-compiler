@@ -65,23 +65,28 @@ void Parser::Block(ParserNode* _root)
 		throw ValueException("BEGIN", *m_CurrentToken);
 	}
 	PushCurrentToken(root);
-	StatementsList(root);
+	bool is_empty = StatementsList(root);
 	if (m_CurrentToken->Type != Lexer::Keywords::END)
 	{
+		if (is_empty)
+		{
+			throw ValueException("END", *m_CurrentToken);
+		}
 		throw UnexpectedGrammarException(NodeTypeToString(NodeType::Block), m_CurrentToken->Row, m_CurrentToken->Column);
-		//throw "unsuported construction in <block>"; // unsuported construction in block
 	}
 	PushCurrentToken(root);
 }
 
-void Parser::StatementsList(ParserNode* _root)
+bool Parser::StatementsList(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::StatementsList);
 	while (Statement(root)) {};
 	if (root->Childs.empty())
 	{
 		PushType(root, NodeType::Empty);
+		return true;
 	}
+	return false;
 }
 
 bool Parser::Statement(ParserNode* _root)
@@ -90,9 +95,13 @@ bool Parser::Statement(ParserNode* _root)
 	{
 		ParserNode* root = PushType(_root, NodeType::Statement);
 		PushCurrentToken(root);
-		StatementsList(root);
+		bool is_empty = StatementsList(root);
 		if (m_CurrentToken->Type != Lexer::Keywords::ENDLOOP)
 		{
+			if (is_empty)
+			{
+				throw ValueException("ENDLOOP", *m_CurrentToken);
+			}
 			throw UnexpectedGrammarException(NodeTypeToString(NodeType::StatementsList), m_CurrentToken->Row, m_CurrentToken->Column);
 		}
 		PushCurrentToken(root);
@@ -113,9 +122,13 @@ bool Parser::Statement(ParserNode* _root)
 			throw UnexpectedGrammarException(NodeTypeToString(NodeType::Expresion), m_CurrentToken->Row, m_CurrentToken->Column);
 		}
 		PushCurrentToken(root);
-		AlternativesList(root);
+		bool is_empty = AlternativesList(root);
 		if (m_CurrentToken->Type != Lexer::Keywords::ENDCASE)
 		{
+			if (is_empty)
+			{
+				throw ValueException("ENDCASE",*m_CurrentToken);
+			}
 			throw UnexpectedGrammarException(NodeTypeToString(NodeType::AlternativesList), m_CurrentToken->Row, m_CurrentToken->Column);
 		}
 		PushCurrentToken(root);
@@ -135,7 +148,10 @@ bool Parser::Statement(ParserNode* _root)
 bool Parser::Expresion(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::Expresion);
-	if (!Multiplier(root)) return false;
+	if (!Multiplier(root))
+	{
+		throw TypeException(NodeTypeToString(NodeType::Multiplier), *m_CurrentToken);
+	}
 	MultipliersList(root);
 	return true;
 }
@@ -169,29 +185,40 @@ bool Parser::MultiplicationInstruction(ParserNode* _root)
 
 bool Parser::Multiplier(ParserNode* _root)
 {
-	ParserNode* root = PushType(_root, NodeType::Multiplier);
 	if (Lexer::Token::IsConstant(m_CurrentToken->Type) || Lexer::Token::IsIdentifier(m_CurrentToken->Type))
 	{
+		ParserNode* root = PushType(_root, NodeType::Multiplier);
 		PushCurrentToken(root);
 		return true;
 	}
 	return false;
 }
 
-void Parser::AlternativesList(ParserNode* _root)
+bool Parser::AlternativesList(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::AlternativesList);
 	while (Alternative(root)){}
 	if (root->Childs.empty())
 	{
 		PushType(root, NodeType::Empty);
+		return true;
 	}
+	return false;
 }
 
 bool Parser::Alternative(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::Alternative);
-	if (!Expresion(root)) return false;
+	try
+	{
+		Expresion(root);
+	}
+	catch (ParserException&)
+	{
+		_root->Childs.pop_back();
+		return false;
+	}
+	//if (!Expresion(root)) return false;
 	//<expression> : / <statementslist> \ */
 
 	if (m_CurrentToken->Type != ':')
@@ -204,9 +231,13 @@ bool Parser::Alternative(ParserNode* _root)
 		throw ValueException('/', *m_CurrentToken);
 	}
 	PushCurrentToken(root);
-	StatementsList(root);
+	bool is_empty = StatementsList(root);
 	if (m_CurrentToken->Type != '\\')
 	{
+		if (is_empty)
+		{
+			throw ValueException('\\', *m_CurrentToken);
+		}
 		throw UnexpectedGrammarException(NodeTypeToString(NodeType::StatementsList),m_CurrentToken->Row,m_CurrentToken->Column);
 	}
 	PushCurrentToken(root);

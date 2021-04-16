@@ -15,7 +15,7 @@ std::string TypeException::Message(const Lexer& lex)
 
 std::string ValueException::Message(const Lexer& lex)
 {
-	m_Error << "'" << m_ExpectedValue << "’ expected but '";
+	m_Error << "'" << m_ExpectedValue << "' expected but '";
 	lex.PrintValueToStream(m_Error, m_Token.Type);
 	m_Error << "' found" << std::endl;
 	return m_Error.str();

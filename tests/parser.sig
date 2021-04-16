@@ -1,8 +1,7 @@
 PROGRAM TEST1;
 BEGIN
-	CASE 5 * VAR1 OF
-		10 MOD 4 : / \
-		10 MOD 4 : / \
+	CASE 5 OF
+		
 	ENDCASE;
 	LOOP
 	ENDLOOP;
