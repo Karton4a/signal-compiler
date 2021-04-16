@@ -158,9 +158,9 @@ void Parser::MultipliersList(ParserNode* _root)
 
 bool Parser::MultiplicationInstruction(ParserNode* _root)
 {
-	ParserNode* root = PushType(_root, NodeType::MultiplicationInstruction);
 	if (m_CurrentToken->Type == '*' || m_CurrentToken->Type == '/' || m_CurrentToken->Type == Lexer::Keywords::MOD)
 	{
+		ParserNode* root = PushType(_root, NodeType::MultiplicationInstruction);
 		PushCurrentToken(root);
 		return true;
 	}
