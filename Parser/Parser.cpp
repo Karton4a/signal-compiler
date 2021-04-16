@@ -135,7 +135,7 @@ bool Parser::Statement(ParserNode* _root)
 bool Parser::Expresion(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::Expresion);
-	if (!Multiplier(_root)) return false;
+	if (!Multiplier(root)) return false;
 	MultipliersList(root);
 	return true;
 }
@@ -145,7 +145,10 @@ void Parser::MultipliersList(ParserNode* _root)
 	ParserNode* root = PushType(_root, NodeType::MultipliersList);
 	while (MultiplicationInstruction(root))
 	{
-		Multiplier(_root);
+		if (!Multiplier(root))
+		{
+			throw TypeException(NodeTypeToString(NodeType::Multiplier), *m_CurrentToken);
+		}
 	}
 	if (root->Childs.empty())
 	{
@@ -167,7 +170,7 @@ bool Parser::MultiplicationInstruction(ParserNode* _root)
 bool Parser::Multiplier(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::Multiplier);
-	if (Lexer::Token::IsConstant(m_CurrentToken->Type) || Lexer::Token::IsKeyword(m_CurrentToken->Type))
+	if (Lexer::Token::IsConstant(m_CurrentToken->Type) || Lexer::Token::IsIdentifier(m_CurrentToken->Type))
 	{
 		PushCurrentToken(root);
 		return true;
