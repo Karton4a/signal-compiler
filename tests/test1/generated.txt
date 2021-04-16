@@ -1,0 +1,8 @@
+Lexer: Error (line 6, column 1): Illegal character '#' detected
+Lexer: Error (line 6, column 3): Illegal character '#' detected
+1   1  5001  #1-4-
+2   1  5002  #1-4
+3   1  5002  #1-4
+4   1  5003  #1341254-141245125-
+5   1  5004  #1341254-141245125
+6   5   501  4

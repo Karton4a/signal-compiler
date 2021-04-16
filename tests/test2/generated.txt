@@ -1,0 +1,20 @@
+Lexer: Error (line 6, column 1): Illegal character '#' detected
+Lexer: Error (line 6, column 3): Illegal character '#' detected
+Lexer: Error (line 1, column 1): Illegal character 'a' detected
+Lexer: Error (line 1, column 2): Illegal character 's' detected
+Lexer: Error (line 1, column 3): Illegal character 'f' detected
+Lexer: Error (line 1, column 4): Illegal character 'g' detected
+Lexer: Error (line 1, column 5): Illegal character 'g' detected
+Lexer: Error (line 1, column 6): Illegal character 'g' detected
+Lexer: Error (line 1, column 7): Illegal character 'a' detected
+Lexer: Error (line 1, column 8): Illegal character 's' detected
+Lexer: Error (line 1, column 10): Illegal character '&' detected
+Lexer: Error (line 1, column 11): Illegal character '&' detected
+Lexer: Error (line 1, column 12): Illegal character '&' detected
+Lexer: Error (line 2, column 1): Illegal character '(' detected
+Lexer: Error (line 2, column 2): Illegal character ')' detected
+Lexer: Error (line 3, column 9): Constant overflow : 13241535235235235235
+Lexer: Error (line 4, column 3): Illegal character '-' detected
+Lexer: Error (line 6, column 7): Unexpected commentary end
+3   3  1001  TOKEN
+4   4   501  10
