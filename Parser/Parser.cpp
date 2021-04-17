@@ -99,11 +99,7 @@ bool Parser::Statement(ParserNode* _root)
 		bool is_empty = StatementsList(root);
 		if (m_CurrentToken->Type != Lexer::Keywords::ENDLOOP)
 		{
-			if (is_empty)
-			{
-				throw ValueException("ENDLOOP", *m_CurrentToken);
-			}
-			throw UnexpectedGrammarException(NodeTypeToString(NodeType::StatementsList), m_CurrentToken->Row, m_CurrentToken->Column);
+			throw ValueException("ENDLOOP", *m_CurrentToken);
 		}
 		PushCurrentToken(root);
 		if (m_CurrentToken->Type != ';')
@@ -216,11 +212,13 @@ bool Parser::Alternative(ParserNode* _root)
 	}
 	catch (ParserException&)
 	{
-		_root->Childs.pop_back();
-		return false;
+		if (root->Childs.back().Childs.empty())
+		{
+			_root->Childs.pop_back();
+			return false;
+		}
+		throw;
 	}
-	//if (!Expresion(root)) return false;
-	//<expression> : / <statementslist> \ */
 
 	if (m_CurrentToken->Type != ':')
 	{

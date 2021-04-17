@@ -20,7 +20,7 @@ int main(int argc, const char* argv[])
 	std::string path;
 	for (size_t i = 1; i < argc; i++)
 	{
-		if (i == 12)
+		if (i == 16)
 		{
 			auto t = 1;
 		}
