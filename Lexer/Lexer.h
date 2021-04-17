@@ -15,7 +15,6 @@ public:
 			Keyword = 401,
 			Constant = 501,
 			Identifier = 1001,
-			WierdToken = 5001,
 		};
 		uint16_t Type;
 		uint32_t Row;
@@ -27,7 +26,6 @@ public:
 		static bool IsKeyword(uint16_t type);
 		static bool IsConstant(uint16_t type);
 		static bool IsIdentifier(uint16_t type);
-		static bool IsWierdToken(uint16_t type);
 	};
 	enum CharType
 	{
@@ -63,7 +61,6 @@ public:
 	bool IsHaveError() { return m_Error.tellp() > 0; }
 	const std::string& GetKeywordValue(uint16_t type) const { return m_KeyWords[type % Token::Keyword]; };
 	const std::string& GetIdentifierValue(uint16_t type) const { return m_Identifiers[type % Token::Identifier]; };
-	const std::string& GetWierdTokenType(uint16_t type) const { return m_WierdTokens[type % Token::WierdToken]; };
 	const unsigned long GetConstantValue(uint16_t type) const { return m_Constants[type % Token::Constant]; };
 	const char GetDelimiterValue(uint16_t type) const { return type; };
 	std::ostream& PrintValueToStream(std::ostream& stream,uint16_t token_type) const;
@@ -77,7 +74,6 @@ private:
 	uint16_t GetIndentifierType(bool& is_new, bool& is_keyword);
 	uint16_t GetConstantType(bool& is_new, unsigned long value);
 	uint16_t GetDelimiterType();
-	uint16_t GetWierdTokenType(bool& is_new);
 	bool TryConverConstant(unsigned long& value);
 private:
 	std::istream* m_Stream = nullptr;
@@ -91,6 +87,5 @@ private:
 	std::array<std::string, 9> m_KeyWords = {"PROGRAM","BEGIN","END","LOOP","ENDLOOP","CASE","OF","MOD","ENDCASE"};
 	std::array<char, 6> m_Delimiters = { '*','/',';',':','.' ,'\\' };
 	std::vector<std::string> m_Identifiers;
-	std::vector<std::string> m_WierdTokens;
 	std::vector<unsigned long> m_Constants;
 };

@@ -2,7 +2,6 @@
 
 Lexer::Lexer()
 {
-	//m_Identifiers.resize(1000);
 	m_CharCodes.fill(CharType::Forbidden);
 	m_CharCodes[8] = CharType::Space;
 	m_CharCodes[13] = CharType::Space;
@@ -10,7 +9,6 @@ Lexer::Lexer()
 	m_CharCodes['\t'] = CharType::Space;
 	m_CharCodes['\n'] = CharType::NewLine;
 	m_CharCodes['('] = CharType::Comment;
-	m_CharCodes['#'] = CharType::WierdTokenStart;
 	for (char delim : m_Delimiters)
 	{
 		m_CharCodes[delim] = CharType::Delimiter;
@@ -123,51 +121,6 @@ void Lexer::Process(std::istream& stream)
 
 			} while (NextChar() && m_CurrentChar != ')');
 			NextChar();
-			break;
-		case CharType::WierdTokenStart:
-		{
-			start_col = m_CurrentColumn;
-			m_CurrentToken.push_back(m_CurrentChar);
-			while (NextChar() && GetCharType(m_CurrentChar) == CharType::Digit)
-			{
-				m_CurrentToken.push_back(m_CurrentChar);
-			} 
-			if (m_CurrentToken.size() == 1)
-			{
-				IllegalCharacterError(m_CurrentRow, m_CurrentColumn - 1, '#');
-				m_CurrentToken.clear();
-				NextChar();
-				break;
-			}
-			do
-			{
-				if (m_CurrentChar != '-')
-				{
-					break;
-				}
-				m_CurrentToken.push_back(m_CurrentChar);
-				bool entered = false;
-				while (NextChar() && GetCharType(m_CurrentChar) == CharType::Digit)
-				{
-					m_CurrentToken.push_back(m_CurrentChar);
-					entered = true;
-				}
-				if (!entered)
-				{
-					break;
-				}
-
-			} while (true);
-
-			bool is_new = false;
-			auto type = GetWierdTokenType(is_new);
-			if (is_new)
-			{
-				m_WierdTokens.push_back(m_CurrentToken);
-			}
-			m_Tokens.emplace_back(type, m_CurrentRow, start_col);
-			m_CurrentToken.clear();
-		}
 			break;
 		default:
 			IllegalCharacterError();
@@ -290,18 +243,6 @@ uint16_t Lexer::GetDelimiterType()
 	return (uint16_t)m_CurrentChar;
 }
 
-uint16_t Lexer::GetWierdTokenType(bool& is_new)
-{
-	is_new = true;
-	auto it = std::find(m_WierdTokens.begin(), m_WierdTokens.end(), m_CurrentToken);
-	if (std::find(m_WierdTokens.begin(), m_WierdTokens.end(), m_CurrentToken) != m_WierdTokens.end())
-	{
-		is_new = false;
-		return Token::WierdToken + std::distance(m_WierdTokens.begin(), it);
-	}
-
-	return Token::WierdToken + m_WierdTokens.size();
-}
 
 bool Lexer::TryConverConstant(unsigned long& value)
 {
@@ -333,10 +274,5 @@ bool Lexer::Token::IsConstant(uint16_t type)
 
 bool Lexer::Token::IsIdentifier(uint16_t type)
 {
-	return type >= Identifier && type < WierdToken;
-}
-
-bool Lexer::Token::IsWierdToken(uint16_t type)
-{
-	return type >= WierdToken;
+	return type >= Identifier;
 }

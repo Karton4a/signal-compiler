@@ -3,7 +3,8 @@
 
 void Parser::Parse(const Lexer& lexer)
 {
-	auto table = lexer.GetTokenTable();
+	m_Error.clear();
+	auto& table = lexer.GetTokenTable();
 	if (table.empty()) return;
 
 	m_CurrentToken = table.cbegin();
@@ -252,12 +253,11 @@ Parser::ParserNode* Parser::PushType(ParserNode* _node, NodeType type)
 
 void Parser::NextToken()
 {
-	if (m_CurrentToken != m_End)
-	{
-		m_PreviousToken = m_CurrentToken;
-		m_CurrentToken++;
-	}
-	else throw UnexpectedEndException(m_PreviousToken->Row,m_PreviousToken->Column);
+	m_PreviousToken = m_CurrentToken;
+	m_CurrentToken++;
+
+	if (m_CurrentToken == m_End)
+		throw UnexpectedEndException(m_PreviousToken->Row, m_PreviousToken->Column);
 }
 
 void Parser::PushCurrentToken(ParserNode* _root)

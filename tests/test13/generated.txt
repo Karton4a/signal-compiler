@@ -1,0 +1,1 @@
+Parser: Error (line 1, column 9): '<identifier>' expected but ';' found
