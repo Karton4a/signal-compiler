@@ -18,12 +18,9 @@ int main(int argc, const char* argv[])
 	Parser pars;
 	std::fstream file;
 	std::string path;
+	std::fstream file2;
 	for (size_t i = 1; i < argc; i++)
 	{
-		if (i == 16)
-		{
-			auto t = 1;
-		}
 		path.assign(argv[i]);
 		file.open(path + "/input.sig");
 		if (file.is_open())
@@ -46,6 +43,9 @@ int main(int argc, const char* argv[])
 				else
 				{
 					PrintTree(pars.GetTree(), 0, lex, file);
+					file2.open(path + "/markdown.txt", std::fstream::out);
+					GenerateSyntaxTreeMarkdown(pars.GetTree(), lex, file2);
+					file2.close();
 				}
 				file.close();
 				lex.ClearData();
