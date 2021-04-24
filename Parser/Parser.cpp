@@ -61,6 +61,7 @@ void Parser::Identifier(ParserNode* _root)
 void Parser::Block(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::Block);
+	Declarations(root);
 	if (m_CurrentToken->Type != Lexer::Keywords::BEGIN)
 	{
 		throw ValueException("BEGIN", *m_CurrentToken);
@@ -77,11 +78,55 @@ void Parser::Block(ParserNode* _root)
 	}
 	PushCurrentToken(root);
 }
-
+void Parser::Declarations(ParserNode* _root)
+{
+	ParserNode* root = PushType(_root, NodeType::Declarations);
+	LabelDecl(root);
+}
+void Parser::LabelDecl(ParserNode* _root)
+{
+	ParserNode* root = PushType(_root, NodeType::LabelDeclarations);
+	if (m_CurrentToken->Type != Lexer::Keywords::LABEL)
+	{
+		PushType(root, NodeType::Empty);
+		return;
+	}
+	PushCurrentToken(root);
+	if (!Lexer::Token::IsConstant(m_CurrentToken->Type))
+	{
+		throw TypeException(NodeTypeToString(NodeType::LabelDeclarations), *m_CurrentToken);
+	}
+	PushCurrentToken(root);
+	LabelsList(root);
+	if (m_CurrentToken->Type != ';')
+	{
+		throw ValueException(";", *m_CurrentToken);
+	}
+	PushCurrentToken(root);
+}
+void Parser::LabelsList(ParserNode* _root)
+{
+	ParserNode* root = PushType(_root, NodeType::LabelsList);
+	if (m_CurrentToken->Type != ',')
+	{
+		root = PushType(root, NodeType::Empty);
+		return;
+	}
+	PushCurrentToken(root);
+	if (!Lexer::Token::IsConstant(m_CurrentToken->Type))
+	{
+		throw TypeException(NodeTypeToString(NodeType::LabelsList), *m_CurrentToken);
+	}
+	PushCurrentToken(root);
+	LabelsList(root);
+}
 bool Parser::StatementsList(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::StatementsList);
-	while (Statement(root)) {};
+	while (Statement(root)) 
+	{
+		root = PushType(root, NodeType::StatementsList);
+	};
 	if (root->Childs.empty())
 	{
 		PushType(root, NodeType::Empty);
@@ -194,7 +239,10 @@ bool Parser::Multiplier(ParserNode* _root)
 bool Parser::AlternativesList(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::AlternativesList);
-	while (Alternative(root)){}
+	while (Alternative(root))
+	{
+		root = PushType(root, NodeType::AlternativesList);
+	}
 	if (root->Childs.empty())
 	{
 		PushType(root, NodeType::Empty);
@@ -282,8 +330,14 @@ const char* NodeTypeToString(NodeType type)
 	case NodeType::Identifier: return "<identifier>";
 	case NodeType::ProcedureIdentifier: return "<procedure-identifier>";
 	case NodeType::Expresion: return "<expresion>";
+	case NodeType::Declarations: return "<declarations>";
+	case NodeType::LabelDeclarations: return "<label-declarations>";
+	case NodeType::LabelsList: return "<labels-list>";
 	case NodeType::Empty: return "<empty>";
 	case NodeType::Token: return "<token>";
 	default: return "<unknown>";
 	}
+	/*Declarations,
+	LabelDeclarations,
+	LabelsList*/
 }

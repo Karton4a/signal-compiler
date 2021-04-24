@@ -31,7 +31,7 @@ void Lexer::Process(std::istream& stream)
 	m_CurrentColumn = 1;
 	uint32_t start_col = 0;
 	while (!m_Stream->eof())
-	{
+	{	
 		switch (GetCharType(m_CurrentChar))
 		{
 		case CharType::Digit:

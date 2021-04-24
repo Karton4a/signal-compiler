@@ -49,6 +49,7 @@ public:
 		OF, 
 		MOD, 
 		ENDCASE,
+		LABEL,
 	};
 public:
 	using TokenTable = std::vector<Token>;
@@ -84,8 +85,8 @@ private:
 	uint32_t m_CurrentColumn = 0;
 	std::vector<Token> m_Tokens;
 	std::stringstream m_Error;
-	std::array<std::string, 9> m_KeyWords = {"PROGRAM","BEGIN","END","LOOP","ENDLOOP","CASE","OF","MOD","ENDCASE"};
-	std::array<char, 6> m_Delimiters = { '*','/',';',':','.' ,'\\' };
+	std::array<std::string, 10> m_KeyWords = {"PROGRAM","BEGIN","END","LOOP","ENDLOOP","CASE","OF","MOD","ENDCASE","LABEL"};
+	std::array<char, 7> m_Delimiters = { '*','/',';',':','.' ,'\\',',' };
 	std::vector<std::string> m_Identifiers;
 	std::vector<unsigned long> m_Constants;
 };

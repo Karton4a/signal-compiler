@@ -6,6 +6,9 @@
 ........1001 TEST1
 ....59 ;
 ....<block>
+......<declarations>
+........<label-declarations>
+..........<empty>
 ......402 BEGIN
 ......<statements-list>
 ........<statement>
@@ -46,14 +49,21 @@
 ....................<empty>
 ..................405 ENDLOOP
 ..................59 ;
+................<statements-list>
+..................<empty>
 ..............92 \
+............<alternatives-list>
+..............<empty>
 ..........409 ENDCASE
 ..........59 ;
-........<statement>
-..........404 LOOP
+........<statements-list>
+..........<statement>
+............404 LOOP
+............<statements-list>
+..............<empty>
+............405 ENDLOOP
+............59 ;
 ..........<statements-list>
 ............<empty>
-..........405 ENDLOOP
-..........59 ;
 ......403 END
 ....46 .

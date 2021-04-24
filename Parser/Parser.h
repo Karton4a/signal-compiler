@@ -21,6 +21,9 @@ enum class NodeType
 	Identifier,
 	ProcedureIdentifier,
 	Expresion,
+	Declarations,
+	LabelDeclarations,
+	LabelsList,
 	Empty,
 	Token,
 };
@@ -53,6 +56,9 @@ private:
 	void ProcedureIdentifier(ParserNode* _root);
 	void Identifier(ParserNode* _root);
 	void Block(ParserNode* _root);
+	void Declarations(ParserNode* _root);
+	void LabelDecl(ParserNode* _root);
+	void LabelsList(ParserNode* _root);
 	bool StatementsList(ParserNode* _root);
 	bool Statement(ParserNode* _root);
 	bool Expresion(ParserNode* _root);
