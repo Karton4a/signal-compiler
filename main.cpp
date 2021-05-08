@@ -1,5 +1,6 @@
 #include "Lexer/Lexer.h"
 #include "Parser/Parser.h"
+#include "CodeGenerator/CodeGenerator.h"
 #include <fstream>
 #include <iostream>
 #include <iomanip>
@@ -16,10 +17,11 @@ int main(int argc, const char* argv[])
 	}
 	Lexer lex;
 	Parser pars;
+	CodeGenerator generator;
 	std::fstream file;
 	std::string path;
 	std::fstream file2;
-	for (size_t i = 1; i < argc; i++)
+	/*for (size_t i = 1; i < argc; i++)
 	{
 		path.assign(argv[i]);
 		file.open(path + "/input.sig");
@@ -60,6 +62,18 @@ int main(int argc, const char* argv[])
 				std::cout << std::endl;
 			}
 		}
+	}*/
+	file.open("tests/code.sig");
+	if (file.is_open())
+	{
+		lex.Process(file);
+		pars.Parse(lex);
+		generator.Generate(pars.GetTree(), lex);
+		std::cout << generator.GetCode()<<std::endl;
+	}
+	else
+	{
+		std::cout << "file open error" << std::endl;
 	}
 	return 0;
 }
