@@ -61,7 +61,7 @@ void Parser::Identifier(ParserNode* _root)
 void Parser::Block(ParserNode* _root)
 {
 	ParserNode* root = PushType(_root, NodeType::Block);
-	Declarations(root);
+	//Declarations(root);
 	if (m_CurrentToken->Type != Lexer::Keywords::BEGIN)
 	{
 		throw ValueException("BEGIN", *m_CurrentToken);
@@ -207,6 +207,7 @@ void Parser::MultipliersList(ParserNode* _root)
 		{
 			throw TypeException(NodeTypeToString(NodeType::Multiplier), *m_CurrentToken);
 		}
+		root = PushType(root, NodeType::MultipliersList);
 	}
 	if (root->Childs.empty())
 	{
