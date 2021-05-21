@@ -1,1 +1,0 @@
-Parser: Error (line 2, column 2): 'BEGIN' expected but 'CASE' found

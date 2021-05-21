@@ -1,46 +1,41 @@
-<signal-program>
-..<program>
-....401 PROGRAM
-....<procedure-identifier>
-......<identifier>
-........1001 TEST1
-....59 ;
-....<block>
-......<declarations>
-........<label-declarations>
-..........410 LABEL
-..........501 1
-..........<labels-list>
-............44 ,
-............502 2
-............<labels-list>
-..............44 ,
-..............503 3
-..............<labels-list>
-................<empty>
-..........59 ;
-......402 BEGIN
-......<statements-list>
-........<statement>
-..........406 CASE
-..........<expresion>
-............<multiplier>
-..............1002 VAR
-............<multipliers-list>
-..............<empty>
-..........407 OF
-..........<alternatives-list>
-............<empty>
-..........409 ENDCASE
-..........59 ;
-........<statements-list>
-..........<statement>
-............404 LOOP
-............<statements-list>
-..............<empty>
-............405 ENDLOOP
-............59 ;
-..........<statements-list>
-............<empty>
-......403 END
-....46 .
+mov eax, 1
+mov ecx, 2
+mul ecx
+mov ecx, 3
+div ecx
+mov ecx, [VAR]
+div ecx
+mov eax, edx
+nop
+mov ebx, eax
+mov eax, 10
+mov ecx, 4
+div ecx
+mov eax, edx
+nop
+cmp ebx,eax
+jne CASE_1:
+Loop_0:
+nop
+jmp Loop_0
+nop
+jmp CASE_END_0
+CASE_1:
+mov eax, 10
+mov ecx, 4
+div ecx
+mov eax, edx
+mov ecx, 100
+mul ecx
+nop
+cmp ebx,eax
+jne CASE_2:
+nop
+jmp CASE_END_0
+CASE_2:
+nop
+CASE_END_0:
+Loop_1:
+nop
+jmp Loop_1
+nop

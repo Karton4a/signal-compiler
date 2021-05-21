@@ -49,7 +49,7 @@ public:
 	};
 	void Parse(const Lexer& lexer);
 	ParserNode* GetTree() { return &m_Root; }
-	bool IsHaveError() { return !m_Error.empty(); }
+	bool IsHasError() { return !m_Error.empty(); }
 	const ErrorMessage& GetError() const { return m_Error; }
 private:
 	void Program(ParserNode* _root);

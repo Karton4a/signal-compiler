@@ -1,1 +1,0 @@
-Parser: Error (line 5, column 2): ':' expected but 'ENDCASE' found

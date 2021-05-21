@@ -1,1 +1,0 @@
-Parser: Error (line 3, column 7): '<multiplier>' expected but 'OF' found

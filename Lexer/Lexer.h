@@ -59,7 +59,7 @@ public:
 	const TokenTable& GetTokenTable() const { return m_Tokens; }
 	const ErrorMessage& GetError() const { return m_Error; }
 	void ClearData();
-	bool IsHaveError() { return m_Error.tellp() > 0; }
+	bool IsHasError() { return m_Error.tellp() > 0; }
 	const std::string& GetKeywordValue(uint16_t type) const { return m_KeyWords[type % Token::Keyword]; };
 	const std::string& GetIdentifierValue(uint16_t type) const { return m_Identifiers[type % Token::Identifier]; };
 	const unsigned long GetConstantValue(uint16_t type) const { return m_Constants[type % Token::Constant]; };
